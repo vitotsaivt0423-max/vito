@@ -1,0 +1,2150 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>醫法通 | 醫療法律 AI 平台</title>
+  <meta name="description" content="專注於醫療法律資訊查詢與 AI 情境分析，協助理解醫療糾紛相關法規。">
+  <link rel="icon" type="image/png" href="../Gemini_Generated_Image_v4pzqhv4pzqhv4pz.png">
+  <style>
+    :root {
+      --ink: #2c2c2c;
+      --muted: #6b6b6b;
+      --line: #d4cfc7;
+      --paper: #f5f2ed;
+      --cream: #faf8f5;
+      --surface: #ffffff;
+      --warm: #8b7355;
+      --warm-dark: #6b5a45;
+      --accent: #5a5a5a;
+      --shadow: 0 4px 24px rgba(44, 44, 44, .06);
+      --shadow-soft: 0 2px 12px rgba(44, 44, 44, .04);
+      --radius: 6px;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 14px clamp(18px, 5vw, 72px);
+      border-bottom: 1px solid var(--line);
+      background: rgba(250, 248, 245, .95);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-logo {
+      height: 48px;
+      width: auto;
+      object-fit: contain;
+      border-radius: 6px;
+    }
+
+    .brand-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .nav-links a {
+      padding: 8px 11px;
+      border-radius: 7px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--ink);
+      background: rgba(139, 115, 85, .1);
+    }
+
+    .hero {
+      display: grid;
+      min-height: 74vh;
+      align-items: center;
+      justify-items: start;
+      padding: clamp(42px, 7vw, 84px) clamp(18px, 5vw, 72px) 34px;
+      background: linear-gradient(135deg, #e8e2da 0%, #d9d3cc 50%, #cdc7c0 100%);
+      color: var(--ink);
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.4) 0%, rgba(255,255,255,.1) 100%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      width: min(1040px, 100%);
+      margin: 0;
+      text-align: left;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 16px;
+      color: var(--warm-dark);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      max-width: 850px;
+      margin: 0 auto 0 0;
+      font-size: clamp(36px, 7vw, 76px);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    .hero p {
+      max-width: 720px;
+      margin: 20px auto 0 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 21px);
+      line-height: 1.7;
+    }
+
+    /* 首頁選項卡片 */
+    .home-options {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 24px;
+      margin: 44px 0 0;
+      justify-content: start;
+      max-width: 900px;
+    }
+
+    @media (max-width: 700px) {
+      .home-options {
+        grid-template-columns: 1fr;
+        max-width: 450px;
+      }
+    }
+
+    .home-option-card {
+      display: flex;
+      flex-direction: column;
+      padding: 36px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(255,255,255,.85);
+      box-shadow: var(--shadow-soft);
+      transition: all .25s ease;
+      cursor: pointer;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .home-option-card:hover {
+      background: #fff;
+      border-color: var(--warm);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow);
+    }
+
+    .home-option-icon {
+      display: grid;
+      width: 48px;
+      height: 48px;
+      place-items: center;
+      margin-bottom: 24px;
+      border-radius: 6px;
+      background: var(--warm);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 600;
+    }
+
+    .home-option-card:nth-child(2) .home-option-icon {
+      background: var(--accent);
+    }
+
+    .home-option-card h3 {
+      margin: 0 0 12px;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .home-option-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .home-option-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      padding: 12px 20px;
+      border-radius: 6px;
+      background: var(--warm);
+      color: #fff;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.3px;
+      transition: all .2s ease;
+    }
+
+    .home-option-card:hover .home-option-btn {
+      background: var(--warm-dark);
+    }
+
+    .home-option-card:nth-child(2) .home-option-btn {
+      background: var(--accent);
+    }
+
+    .home-option-card:nth-child(2):hover .home-option-btn {
+      background: var(--ink);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      cursor: pointer;
+      font-weight: 800;
+      transition: .18s ease;
+    }
+
+    .btn.primary {
+      color: #fff;
+      background: var(--warm);
+    }
+
+    .btn.primary:hover { background: var(--warm-dark); }
+
+    .btn.ghost {
+      color: var(--ink);
+      border-color: var(--line);
+      background: rgba(255,255,255,.7);
+    }
+
+    .btn.ghost:hover {
+      background: #fff;
+      border-color: var(--warm);
+    }
+
+    .btn.secondary {
+      color: var(--warm-dark);
+      border-color: var(--line);
+      background: rgba(139, 115, 85, .08);
+    }
+
+    .btn.secondary:hover {
+      background: rgba(139, 115, 85, .15);
+    }
+
+    .section {
+      padding: 54px clamp(18px, 5vw, 72px);
+    }
+
+    .section.alt { background: var(--cream); }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 18px;
+      max-width: 1180px;
+      margin: 0 auto 22px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(25px, 3vw, 38px);
+      line-height: 1.18;
+      letter-spacing: 0;
+    }
+
+    .section-head p {
+      max-width: 560px;
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .workspace {
+      display: grid;
+      grid-template-columns: minmax(280px, 390px) 1fr;
+      gap: 20px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .panel,
+    .law-card,
+    .topic-card,
+    .disclaimer {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 1px 0 rgba(23, 33, 31, .03);
+    }
+
+    .panel {
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    label {
+      display: block;
+      margin: 0 0 7px;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .field,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #cbd4d0;
+      border-radius: 7px;
+      background: #fff;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .field,
+    select {
+      min-height: 46px;
+      padding: 10px 12px;
+    }
+
+    textarea {
+      min-height: 144px;
+      resize: vertical;
+      padding: 12px;
+    }
+
+    .field:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--warm);
+      box-shadow: 0 0 0 3px rgba(139, 115, 85, .12);
+    }
+
+    .form-row {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 34px;
+      padding: 6px 10px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .chip.active {
+      color: #fff;
+      border-color: var(--warm);
+      background: var(--warm);
+    }
+
+    .results {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .law-card {
+      padding: 18px;
+    }
+
+    .law-card header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 10px;
+    }
+
+    .law-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.3;
+    }
+
+    .article {
+      flex: 0 0 auto;
+      padding: 5px 8px;
+      border-radius: 6px;
+      color: var(--warm-dark);
+      background: rgba(139, 115, 85, .12);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .summary {
+      margin: 9px 0 12px;
+      color: var(--muted);
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .tag {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(139, 115, 85, .08);
+      color: var(--warm-dark);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .tag.gold { background: rgba(139, 115, 85, .15); color: var(--warm-dark); }
+    .tag.coral { background: rgba(107, 107, 107, .1); color: var(--muted); }
+
+    .source {
+      margin-top: 12px;
+      color: var(--warm);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .topics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .topic-card {
+      padding: 18px;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .topic-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+
+    .topic-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      margin-bottom: 12px;
+      border-radius: 6px;
+      color: var(--warm-dark);
+      background: rgba(139, 115, 85, .12);
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .topic-card:nth-child(2n) .topic-icon { background: rgba(107, 107, 107, .1); }
+    .topic-card:nth-child(3n) .topic-icon { background: rgba(139, 115, 85, .1); }
+    .topic-card:nth-child(4n) .topic-icon { background: rgba(107, 107, 107, .08); }
+
+    .topic-card h3,
+    .analysis h3 {
+      margin: 0 0 7px;
+      font-size: 19px;
+    }
+
+    .topic-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .analysis {
+      display: grid;
+      gap: 13px;
+    }
+
+    .analysis-block {
+      padding: 16px;
+      border-left: 3px solid var(--warm);
+      border-radius: 0 6px 6px 0;
+      background: #fff;
+    }
+
+    .analysis-block ul {
+      margin: 8px 0 0;
+      padding-left: 20px;
+    }
+
+    .action-toolbar {
+      display: grid;
+      grid-template-columns: minmax(180px, 300px) 1fr;
+      gap: 12px;
+      align-items: end;
+      margin-top: 10px;
+    }
+
+    .action-output {
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(139, 115, 85, .04);
+    }
+
+    .action-output h4 {
+      margin: 0 0 8px;
+      font-size: 17px;
+    }
+
+    .action-output p {
+      margin: 0 0 8px;
+    }
+
+    .disclaimer {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 18px;
+      border-color: var(--line);
+      background: rgba(139, 115, 85, .06);
+      color: var(--warm-dark);
+    }
+
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .about-item {
+      padding: 20px;
+      border-top: 3px solid var(--warm);
+      background: #fff;
+    }
+
+    .about-item h3 { margin: 0 0 8px; }
+    .about-item p { margin: 0; color: var(--muted); }
+
+    .author-card {
+      display: flex;
+      gap: 32px;
+      padding: 32px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: var(--shadow-soft);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .author-photo {
+      flex-shrink: 0;
+      width: 180px;
+      height: 180px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: var(--cream);
+    }
+
+    .author-info {
+      flex: 1;
+    }
+
+    .author-name {
+      font-size: 24px;
+      font-weight: 700;
+      margin: 0 0 16px;
+      color: var(--ink);
+    }
+
+    .author-contact {
+      margin-bottom: 20px;
+    }
+
+    .author-contact h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--warm);
+      margin: 0 0 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .contact-item a {
+      color: var(--ink);
+      transition: color .2s;
+    }
+
+    .contact-item a:hover {
+      color: var(--warm);
+    }
+
+    .author-mission {
+      border-top: 1px solid var(--line);
+      padding-top: 20px;
+    }
+
+    .author-mission h4 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--warm);
+      margin: 0 0 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .author-mission p {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--ink);
+      margin: 0;
+    }
+
+    @media (max-width: 600px) {
+      .author-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 24px;
+      }
+
+      .author-photo {
+        width: 140px;
+        height: 140px;
+      }
+    }
+
+    .footer {
+      padding: 26px clamp(18px, 5vw, 72px);
+      color: rgba(255,255,255,.7);
+      background: var(--ink);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+
+    .empty {
+      padding: 34px 18px;
+      border: 1px dashed #b8c4c0;
+      border-radius: var(--radius);
+      color: var(--muted);
+      text-align: center;
+      background: rgba(255,255,255,.56);
+    }
+
+    @media (max-width: 900px) {
+      .workspace,
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topics-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .section-head,
+      .footer-inner {
+        display: block;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .nav {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .nav-links {
+        justify-content: flex-start;
+      }
+
+      .topics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .law-card header {
+        display: block;
+      }
+
+      .article {
+        display: inline-flex;
+        margin-top: 9px;
+      }
+
+      .action-toolbar {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav" aria-label="主要導覽">
+    <a class="brand" href="#top" aria-label="醫法通 首頁">
+      <img src="../Gemini_Generated_Image_v4pzqhv4pzqhv4pz.png" alt="醫法通" class="brand-logo">
+      <span class="brand-text">醫法通</span>
+    </a>
+    <div class="nav-links">
+      <a href="#search">查詢法條</a>
+      <a href="#analyze">AI 情境分析</a>
+      <a href="author.html">網站作者</a>
+      <a href="#about">關於</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-inner">
+        <h1>醫法通</h1>
+        <p>專注於醫療法律領域，協助理解醫療糾紛相關法規、條文重點與權益保護。<br>AI 只協助整理與比對，不取代律師或正式法律諮詢。</p>
+        <div class="home-options">
+          <a class="home-option-card" href="#search">
+            <span class="home-option-icon">查</span>
+            <h3>查詢法條</h3>
+            <p>依法律名稱、條號、關鍵字或醫療場景搜尋醫療相關法條，快速找到醫療法律資訊。</p>
+          </a>
+          <a class="home-option-card" href="#analyze">
+            <span class="home-option-icon">AI</span>
+            <h3>AI 分析</h3>
+            <p>輸入醫療糾紛情境，系統會用本地規則抽取關鍵詞，找出可能相關的醫療法律條文與建議。</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="search" class="section">
+      <div class="section-head">
+        <div>
+          <h2>醫療法條查詢</h2>
+          <p>依法律名稱、條號、關鍵字或醫療場景搜尋醫療相關法條資料。</p>
+        </div>
+      </div>
+      <div class="workspace">
+        <aside class="panel">
+          <div class="form-row">
+            <label for="searchInput">搜尋文字</label>
+            <input id="searchInput" class="field" type="search" placeholder="例如：醫療疏失、病歷、手術風險、告知義務">
+          </div>
+          <div class="form-row">
+            <label for="lawFilter">法律類別</label>
+            <select id="lawFilter">
+              <option value="">全部法律</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label>常見主題</label>
+            <div id="topicFilters" class="filters"></div>
+          </div>
+          <button id="clearSearch" class="btn secondary" type="button">清除條件</button>
+        </aside>
+        <div id="lawResults" class="results" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="analyze" class="section alt">
+      <div class="section-head">
+        <div>
+          <h2>AI 醫療情境分析</h2>
+          <p>輸入醫療糾紛情境，系統會用本地規則抽取關鍵詞，再從醫療法條中找出可能相關的參考條文。</p>
+        </div>
+      </div>
+      <div class="workspace">
+        <aside class="panel">
+          <div class="form-row">
+            <label for="queryInput">描述你的醫療情境</label>
+            <textarea id="queryInput">手術後出現併發症，醫師沒有事先告知風險，這樣可以請求賠償嗎？</textarea>
+          </div>
+          <button id="analyzeBtn" class="btn primary" type="button">整理可能方向</button>
+        </aside>
+        <div id="analysisResult" class="analysis" aria-live="polite"></div>
+      </div>
+    </section>
+
+
+    <section class="section alt">
+      <div class="disclaimer">
+        <strong>重要聲明：</strong>本網站內容僅供醫療法律資訊查詢、法規學習與初步參考，不提供法律意見、訴訟策略或個案結論。實際案件請以主管機關公告、法院見解與專業法律人士意見為準，並避免輸入身分證字號、完整姓名、地址等敏感個資。
+      </div>
+    </section>
+
+    <section id="about" class="section">
+      <div class="section-head">
+        <div>
+          <h2>關於醫法通</h2>
+          <p>醫法通的核心不是讓 AI 取代法律專業，而是降低病患與醫療人員第一次接觸醫療法規資訊的門檻。</p>
+        </div>
+      </div>
+      <div class="about-grid">
+        <div class="about-item">
+          <h3>從醫療問題出發</h3>
+          <p>把手術併發症、病歷爭議、醫療疏失、告知義務等情境轉成可搜尋的法律主題與關鍵字。</p>
+        </div>
+        <div class="about-item">
+          <h3>法條資料可維護</h3>
+          <p>使用本地醫療法律 mock data，後續可改接資料庫、CMS 或官方法規資料來源。</p>
+        </div>
+        <div class="about-item">
+          <h3>AI 有明確邊界</h3>
+          <p>AI 只基於候選醫療法條做白話整理，不自行編造法條，也不判斷醫療疏失成立或賠償金額。</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <strong>醫法通</strong>
+      <span>醫療法律 AI 平台 · Updated 2026-04-20 · Source: 全國法規資料庫</span>
+    </div>
+  </footer>
+
+  <script>
+    // 醫療法律法條資料庫
+    const laws = [
+      {
+        id: "medical-care-82",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第82條",
+        articleNumber: 82,
+        category: "醫療責任",
+        title: "醫療業務損害責任",
+        text: "醫療機構及其醫事人員因執行業務致生損害於病人者，負損害賠償責任。",
+        summary: "醫療機構及醫護人員執行醫療業務造成病人損害，需負損害賠償責任。醫療糾紛通常會先看醫療處置是否符合當時醫療水準、是否有注意義務違反，以及損害與醫療行為之間是否有關聯。",
+        keywords: ["醫療糾紛", "醫療疏失", "醫療過失", "醫療責任", "損害賠償", "醫師", "病患", "注意義務"],
+        scenarios: ["手術併發症", "診斷錯誤", "治療不當", "醫療意外", "醫療賠償"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-63",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第63條",
+        articleNumber: 63,
+        category: "告知義務",
+        title: "手術或麻醉同意書之簽具",
+        text: "醫療機構實施手術，應向病人或其法定代理人、配偶、親屬或關係人說明手術原因、手術成功率或可能發生之併發症及危險，並經其同意，簽具手術同意書及麻醉同意書，始得為之。但情況緊急者，不在此限。",
+        summary: "手術前必須簽具手術同意書及麻醉同意書，醫院應說明手術原因、成功率、併發症及危險。緊急情況下可例外處理。",
+        keywords: ["手術", "麻醉", "告知義務", "同意書", "風險", "併發症", "手術同意", "麻醉同意"],
+        scenarios: ["未簽同意書", "未告知風險", "手術失敗", "麻醉併發症", "緊急手術"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-71",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第71條",
+        articleNumber: 71,
+        category: "感染控制",
+        title: "院內感染控制",
+        text: "醫療機構應依感染控制政策，建立並執行院內感染控制及監測計畫。",
+        summary: "醫院必須建立感染控制制度，防範院內感染發生。若因消毒不當或無菌操作疏失導致感染，醫院可能需負相關責任。",
+        keywords: ["院內感染", "感染控制", "無菌操作", "手術感染", "化膿", "傷口感染"],
+        scenarios: ["手術後感染", "傷口化膿", "院內感染", "消毒不當", "細菌感染"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "physician-12",
+        lawName: "醫師法",
+        lawCode: "physician_act",
+        article: "第12條",
+        articleNumber: 12,
+        category: "病歷紀錄",
+        title: "病歷製作義務",
+        text: "醫師執行業務，應製作病歷，並於病歷上簽名或蓋章及加註執行年、月、日。",
+        summary: "醫師必須製作完整病歷，並簽名記錄日期。病歷是醫療糾紛重要證據，病患也有權申請病歷複印。",
+        keywords: ["病歷", "醫師", "病歷紀錄", "醫療文件", "竄改", "申請病歷"],
+        scenarios: ["病歷不見", "病歷記錯", "拒絕給病歷", "病歷不完整", "病歷竄改"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "pharmacy-45",
+        lawName: "藥事法",
+        lawCode: "pharmaceutical_act",
+        article: "第45條",
+        articleNumber: 45,
+        category: "用藥安全",
+        title: "處方藥物管理",
+        text: "醫師處方藥物，應於處方箋載明病人姓名、藥名、劑量等，並遵偱藥物使用規範。",
+        summary: "醫師開藥必須清楚記載病人資訊及藥物資料，確保用藥安全。用藥錯誤或劑量過量可能構成醫療疏失。",
+        keywords: ["藥物", "處方", "過敏", "用藥錯誤", "劑量", "藥師", "藥物過敏"],
+        scenarios: ["藥物過敏", "用藥過量", "錯誤用藥", "未詢問過敏史", "藥物交互作用"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "dispute-6",
+        lawName: "醫療事故預防及爭議處理法",
+        lawCode: "medical_dispute_act",
+        article: "第6條",
+        articleNumber: 6,
+        category: "爭議處理",
+        title: "醫療爭議說明義務",
+        text: "發生醫療爭議時，病人或其家屬得請求醫療機構說明；醫療機構應以適當方式溝通並提供必要協助。",
+        summary: "遇到醫療糾紛時，病患可要求醫院說明，醫院有義務溝通協助。可先整理病歷、收據與溝通紀錄，評估調解或其他爭議處理程序。",
+        keywords: ["醫療爭議", "說明義務", "病歷", "溝通", "調解", "醫療調解"],
+        scenarios: ["要求說明", "醫院拒絕溝通", "申請病歷", "醫療調解", "爭議處理"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "civil-184",
+        lawName: "民法",
+        lawCode: "civil_code",
+        article: "第184條",
+        articleNumber: 184,
+        category: "侵權行為",
+        title: "侵權行為損害賠償",
+        text: "因故意或過失，不法侵害他人之權利者，負損害賠償責任。",
+        summary: "醫療人員因故意或過失造成病患權利受損，需負損害賠償責任。這是醫療糾紛民事賠償的重要法條依據。",
+        keywords: ["侵權", "過失", "損害賠償", "不法侵害", "醫療過失", "民事責任"],
+        scenarios: ["醫療傷害", "人身損害", "過失責任", "精神賠償"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "civil-193",
+        lawName: "民法",
+        lawCode: "civil_code",
+        article: "第193條",
+        articleNumber: 193,
+        category: "損害賠償",
+        title: "勞動能力喪失賠償",
+        text: "不法侵害他人之身體或健康者，對於被害人因此喪失或減少勞動能力或增加生活上之需要時，應負損害賠償責任。",
+        summary: "醫療傷害導致勞動能力喪失或生活需求增加時，可請求相關賠償。例如永久傷殘、無法工作、長期照護等情況。",
+        keywords: ["勞動能力", "身體健康", "損害賠償", "生活需求", "失能", "傷殘"],
+        scenarios: ["永久傷殘", "失能", "長期照護", "無法工作", "醫療依賴"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-62",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第62條",
+        articleNumber: 62,
+        category: "醫療品質",
+        title: "醫療品質管理制度",
+        text: "醫院應建立醫療品質管理制度，並檢討評估。為提升醫療服務品質，中央主管機關得訂定辦法，就特定醫療技術規定適應症、操作人員資格等。",
+        summary: "醫院必須建立醫療品質管理制度並定期評估。特定醫療技術需符合適應症及操作人員資格規定，確保醫療品質。",
+        keywords: ["醫療品質", "管理制度", "適應症", "操作人員資格", "特定醫療技術"],
+        scenarios: ["醫療品質不良", "管理制度缺失", "技術操作不當", "醫療疏失"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-60",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第60條",
+        articleNumber: 60,
+        category: "緊急救治",
+        title: "危急病人之救治義務",
+        text: "醫院、診所遇有危急病人，應先予適當之急救，不得無故拖延或拒絕；並應依規定聯繫轉診或會診。",
+        summary: "醫療機構對危急病人有急救義務，不得拒絕或拖延。違反者可能受罰。這是保障急重症患者權益的重要規定。",
+        keywords: ["危急病人", "急救", "救治義務", "轉診", "拒絕急救", "會診"],
+        scenarios: ["急診拒收", "急救拖延", "危急病人", "轉診爭議", "救治不及"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-68",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第68條",
+        articleNumber: 68,
+        category: "病歷紀錄",
+        title: "記載病歷製作紀錄",
+        text: "醫師應於病歷記載製作之年、月、日，並簽名或蓋章。病歷由醫師以外之人製作時，應經醫師審閱後簽名或蓋章。",
+        summary: "病歷必須記載製作日期並由醫師簽名。非醫師製作之病歷需經醫師審閱簽名。這是確保病歷真實性及責任歸屬的重要規定。",
+        keywords: ["病歷", "製作紀錄", "簽名", "審閱", "病歷真實性", "日期記載"],
+        scenarios: ["病歷未簽名", "病歷日期不實", "未經醫師審閱", "病歷爭議"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 醫療法 - 更多條款
+      {
+        id: "medical-care-64",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第64條",
+        articleNumber: 64,
+        category: "告知義務",
+        title: "侵入性檢查治療告知",
+        text: "醫療機構實施中央主管機關規定之侵入性檢查或治療，應向病人或其法定代理人說明檢查或治療之原因、方式、成功率、可能發生之併發症及危險，並經其同意。",
+        summary: "侵入性檢查（如骨髓穿刺、腰椎穿刺等）也需告知風險並取得同意。未告知可能構成醫療疏失。",
+        keywords: ["侵入性", "檢查", "治療", "告知", "風險", "同意", "併發症"],
+        scenarios: ["骨髓穿刺", "腰椎穿刺", "內視鏡檢查", "侵入性治療", "檢查併發症"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-65",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第65條",
+        articleNumber: 65,
+        category: "組織檢體",
+        title: "採取組織檢體或切取器官之分析及評估",
+        text: "醫療機構採取組織檢體或切取器官施行移植手術前，應對捐贈者施行必要之檢查及評估，經判定適宜後，始得為之。",
+        summary: "器官移植或組織檢體採取前，必須對捐贈者進行必要檢查及評估，確認適宜後才能進行。確保捐贈者安全。",
+        keywords: ["器官移植", "組織檢體", "捐贈者", "檢查評估", "器官捐贈", "切取器官"],
+        scenarios: ["器官捐贈", "組織檢體", "器官移植", "捐贈者評估", "移植手術"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-66",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第66條",
+        articleNumber: 66,
+        category: "藥劑管理",
+        title: "藥劑容器或包裝上載明事項",
+        text: "醫療機構調劑藥品，應於藥劑容器或包裝上載明病人姓名、藥名、劑量、用法、醫療機構名稱及調劑者姓名。",
+        summary: "藥劑必須清楚標示病人姓名、藥名、劑量、用法等資訊，防止用藥錯誤。標示不清可能導致給藥錯誤。",
+        keywords: ["藥劑", "藥品", "容器標示", "劑量", "用法", "調劑", "用藥安全"],
+        scenarios: ["藥品標示不清", "用藥錯誤", "劑量錯誤", "給藥錯誤", "藥劑管理"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-67",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第67條",
+        articleNumber: 67,
+        category: "病歷管理",
+        title: "病歷應包括之資料",
+        text: "醫療機構應建立清晰、詳實、完整之病歷，包括主訴、病史、檢查結果、診斷、治療方針、手術過程、麻醉過程等。",
+        summary: "病歷必須包含完整醫療資訊：主訴、病史、檢查、診斷、治療、手術及麻醉過程。病歷不完整可能影響醫療品質及爭議處理。",
+        keywords: ["病歷", "病史", "檢查結果", "診斷", "治療", "手術過程", "麻醉過程"],
+        scenarios: ["病歷不全", "未記錄手術過程", "病歷爭議", "醫療紀錄不完整"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-81",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第81條",
+        articleNumber: 81,
+        category: "出生證明",
+        title: "出生證明書交付",
+        text: "醫療機構人員於病人出生或死亡時，應為其出生或死亡之登記，並交付證明書。",
+        summary: "醫療機構有義務開立出生或死亡證明。出生證明涉及親子關係認定，死亡證明涉及繼承等法律問題。",
+        keywords: ["出生證明", "死亡證明", "出生登記", "死亡登記", "證明書", "親子"],
+        scenarios: ["出生證明", "死亡證明", "出生登記", "親子關係", "繼承"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 醫師法
+      {
+        id: "physician-11",
+        lawName: "醫師法",
+        lawCode: "physician_act",
+        article: "第11條",
+        articleNumber: 11,
+        category: "醫師義務",
+        title: "醫師親自診察義務",
+        text: "醫師非親自診察，不得施行治療、開給方劑或交付診斷書。醫師親自接生，得交付出生證明書。",
+        summary: "醫師必須親自看診才能開藥、治療或開診斷書。禁止遠距離醫療未診察即開藥，違法可能受罰。",
+        keywords: ["親自診察", "開藥", "處方", "診斷書", "遠距醫療", "親自接生"],
+        scenarios: ["未診察開藥", "遠距開藥", "診斷書爭議", "親自診察", "代診"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "physician-13",
+        lawName: "醫師法",
+        lawCode: "physician_act",
+        article: "第13條",
+        articleNumber: 13,
+        category: "病歷管理",
+        title: "病歷保存與銷毀",
+        text: "醫師應妥為保管病歷，並至少保存七年。病歷之銷毀，應經中央主管機關核准。",
+        summary: "病歷至少保存7年，未經核准不得銷毀。病歷是醫療糾紛重要證據，滅失可能影響訴訟舉證。",
+        keywords: ["病歷保存", "七年", "銷毀", "病歷滅失", "保管", "保存期限"],
+        scenarios: ["病歷滅失", "病歷銷毀", "病歷不見", "保存期限", "病歷毀損"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "physician-14",
+        lawName: "醫師法",
+        lawCode: "physician_act",
+        article: "第14條",
+        articleNumber: 14,
+        category: "病歷申請",
+        title: "病歷交付與複製",
+        text: "醫師應依病人要求，交付病歷摘要或複製病歷。醫療機構收取費用，以彌補工本費為限。",
+        summary: "病人有權申請病歷摘要或複製本，醫院不得拒絕，只能收取合理工本費。拒絕交付可能違法。",
+        keywords: ["病歷申請", "病歷摘要", "複製病歷", "交付病歷", "工本費", "病歷查閱"],
+        scenarios: ["申請病歷被拒", "病歷摘要", "病歷複印", "醫院拒絕", "病歷交付"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "physician-25",
+        lawName: "醫師法",
+        lawCode: "physician_act",
+        article: "第25條",
+        articleNumber: 25,
+        category: "醫師懲戒",
+        title: "醫師業務不當行為",
+        text: "醫師有業務上不正當行為，或逾越醫師業務範圍而為醫療行為者，得處新臺幣一萬元以上五萬元以下罰鍰。",
+        summary: "醫師業務不當或超範圍行醫可受罰。這包括無照行醫、超專科行醫等違規行為。",
+        keywords: ["醫師懲戒", "業務不當", "超範圍行醫", "罰鍰", "不正當行為", "違規"],
+        scenarios: ["超範圍行醫", "無照行醫", "業務不當", "醫師懲戒", "罰鍰"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 護理人員法
+      {
+        id: "nurse-24",
+        lawName: "護理人員法",
+        lawCode: "nurse_act",
+        article: "第24條",
+        articleNumber: 24,
+        category: "護理義務",
+        title: "護理人員執業規範",
+        text: "護理人員執業，應依醫師開具之診療醫囑為之。但緊急情形，得依其專業知識先行處理，並報告醫師。",
+        summary: "護理人員應依醫囑執行護理。緊急時可依專業先行處理再報告。擅自變更醫囑可能涉及法律責任。",
+        keywords: ["護理", "醫囑", "執業規範", "護理人員", "緊急處理", "執行醫囑"],
+        scenarios: ["未依醫囑", "醫囑錯誤", "護理疏失", "給藥錯誤", "護理責任"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "nurse-28",
+        lawName: "護理人員法",
+        lawCode: "nurse_act",
+        article: "第28條",
+        articleNumber: 28,
+        category: "護理記錄",
+        title: "護理紀錄製作",
+        text: "護理人員執行護理業務時，應製作紀錄，記載病人之健康狀況、護理措施及執行時間，並簽名或蓋章。",
+        summary: "護理人員必須製作護理紀錄，記載病人狀況及護理措施。護理紀錄是醫療糾紛重要佐證資料。",
+        keywords: ["護理紀錄", "護理記錄", "健康狀況", "護理措施", "製作紀錄", "簽名"],
+        scenarios: ["護理紀錄不全", "未記錄", "護理疏失", "紀錄錯誤", "護理責任"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 精神衛生法
+      {
+        id: "mental-health-42",
+        lawName: "精神衛生法",
+        lawCode: "mental_health_act",
+        article: "第42條",
+        articleNumber: 42,
+        category: "強制住院",
+        title: "嚴重病人強制住院",
+        text: "嚴重病人有明顯傷害他人或自己之危險，或有嚴重傷害行為，經專科醫師診斷有全日住院治療必要者，應強制住院。",
+        summary: "嚴重精神病人有自傷或傷人危險時可強制住院。須由2位專科醫師鑑定，並有相關程序保障。",
+        keywords: ["強制住院", "精神衛生", "嚴重病人", "專科醫師", "自傷", "傷人", "鑑定"],
+        scenarios: ["強制住院", "精神病人", "強制治療", "自傷危險", "傷人危險", "精神鑑定"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "mental-health-51",
+        lawName: "精神衛生法",
+        lawCode: "mental_health_act",
+        article: "第51條",
+        articleNumber: 51,
+        category: "精神鑑定",
+        title: "精神鑑定報告",
+        text: "法院或檢察官對於刑事案件得諭知精神鑑定，受鑑定人所在之醫療機構應配合辦理。",
+        summary: "刑事案件中法院可要求精神鑑定，醫療機構應配合。精神鑑定影響刑事責任能力判斷。",
+        keywords: ["精神鑑定", "刑事", "責任能力", "鑑定報告", "法院", "檢察官"],
+        scenarios: ["精神鑑定", "刑事責任", "心神喪失", "精神障礙", "鑑定報告"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 傳染病防治法
+      {
+        id: "communicable-disease-37",
+        lawName: "傳染病防治法",
+        lawCode: "communicable_disease_act",
+        article: "第37條",
+        articleNumber: 37,
+        category: "隔離治療",
+        title: "傳染病隔離治療",
+        text: "傳染病病人經醫師診斷認有隔離治療必要者，醫療機構應採行隔離治療措施。",
+        summary: "第一類、第五類傳染病可依法隔離治療。COVID-19期間隔離治療即依此法。",
+        keywords: ["傳染病", "隔離", "隔離治療", "強制隔離", "法定傳染病", "醫療隔離"],
+        scenarios: ["隔離治療", "傳染病", "強制隔離", "COVID", "隔離爭議"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "communicable-disease-62",
+        lawName: "傳染病防治法",
+        lawCode: "communicable_disease_act",
+        article: "第62條",
+        articleNumber: 62,
+        category: "通報義務",
+        title: "傳染病通報",
+        text: "醫師發現傳染病或疑似傳染病時，應於二十四小時內向當地主管機關報告。",
+        summary: "醫師發現法定傳染病必須24小時內通報。隱匿疫情可能受罰，這是公共衛生重要機制。",
+        keywords: ["傳染病通報", "24小時", "法定傳染病", "醫師通報", "隱匿疫情"],
+        scenarios: ["未通報傳染病", "隱匿疫情", "法定傳染病", "通報義務", "醫師通報"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 安寧緩和醫療條例
+      {
+        id: "hospice-4",
+        lawName: "安寧緩和醫療條例",
+        lawCode: "hospice_act",
+        article: "第4條",
+        articleNumber: 4,
+        category: "DNR意願",
+        title: "不施行心肺復甦術意願",
+        text: "成年人得依其意願，預立不施行心肺復甦術意願書，並得隨時自行或由其代理人撤回。",
+        summary: "成年人可預立DNR（不急救）意願書。末期病人可依其意願不接受CPR，須書面為之。",
+        keywords: ["DNR", "不急救", "心肺復甦術", "安寧療護", "末期病人", "預立意願"],
+        scenarios: ["DNR", "不急救", "安寧療護", "末期病人", "放棄急救", "預立意願"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "hospice-7",
+        lawName: "安寧緩和醫療條例",
+        lawCode: "hospice_act",
+        article: "第7條",
+        articleNumber: 7,
+        category: "終止治療",
+        title: "不施行維生治療",
+        text: "末期病人得依其意願，預立不施行維生醫療意願書，停止或撤除維生醫療設備。",
+        summary: "末期病人可預立意願停止維生治療（如呼吸器、插管）。須2位專科醫師確認為末期。",
+        keywords: ["維生治療", "終止治療", "末期病人", "拔管", "呼吸器", "維生設備"],
+        scenarios: ["拔管", "終止治療", "維生治療", "末期病人", "呼吸器移除"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 全民健康保險法
+      {
+        id: "nhi-51",
+        lawName: "全民健康保險法",
+        lawCode: "national_health_insurance_act",
+        article: "第51條",
+        articleNumber: 51,
+        category: "健保給付",
+        title: "健保醫療給付",
+        text: "保險對象至保險醫事服務機構就醫，其醫療費用應由全民健康保險給付，並依規定繳交保險對象應負擔之費用。",
+        summary: "全民健保給付醫療費用，病人只需負擔部分負擔。醫院不得因欠費拒絕急診或必要治療。",
+        keywords: ["全民健保", "健保給付", "部分負擔", "醫療費用", "健保署", "給付爭議"],
+        scenarios: ["健保給付", "部分負擔", "醫療費用", "欠費治療", "健保爭議"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "nhi-72",
+        lawName: "全民健康保險法",
+        lawCode: "national_health_insurance_act",
+        article: "第72條",
+        articleNumber: 72,
+        category: "健保爭議",
+        title: "健保爭議審議",
+        text: "保險對象與保險醫事服務機構間，因全民健康保險之事項發生爭議時，得提起爭議審議。",
+        summary: "健保給付爭議可申請爭議審議。例如醫院認定不給付但病人認為應給付之爭議。",
+        keywords: ["健保爭議", "爭議審議", "給付爭議", "健保署", "醫療爭議", "審議"],
+        scenarios: ["健保不給付", "給付爭議", "爭議審議", "健保爭議", "拒絕給付"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 藥害救濟法
+      {
+        id: "drug-relief-3",
+        lawName: "藥害救濟法",
+        lawCode: "drug_relief_act",
+        article: "第3條",
+        articleNumber: 3,
+        category: "藥害救濟",
+        title: "正當使用合法藥物受害",
+        text: "被害人因正當使用合法藥物，而非可歸責於使用者，致發生嚴重疾病、障礙或死亡者，得申請藥害救濟。",
+        summary: "正當用藥卻受害可申請藥害救濟。無需證明醫院或藥廠有過失，屬無過失補償制度。",
+        keywords: ["藥害救濟", "正當使用", "合法藥物", "無過失", "藥物傷害", "救濟金"],
+        scenarios: ["藥物不良反應", "藥害", "救濟申請", "正當用藥", "藥物傷害"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 罕見疾病防治及藥物法
+      {
+        id: "rare-disease-11",
+        lawName: "罕見疾病防治及藥物法",
+        lawCode: "rare_disease_act",
+        article: "第11條",
+        articleNumber: 11,
+        category: "罕病給付",
+        title: "罕見疾病給付保障",
+        text: "罕見疾病之藥物、維持生命所需之特殊營養食品及維持必要生命徵象所需之特殊醫療器材，應予給付。",
+        summary: "罕見疾病藥物及特殊營養食品應予健保給付。保障罕病病人權益，減輕罕病家庭負擔。",
+        keywords: ["罕見疾病", "罕病", "健保給付", "孤兒藥", "特殊營養", "給付保障"],
+        scenarios: ["罕見疾病", "罕病給付", "孤兒藥", "健保給付", "罕病權益"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 民法
+      {
+        id: "civil-195",
+        lawName: "民法",
+        lawCode: "civil_code",
+        article: "第195條",
+        articleNumber: 195,
+        category: "精神損害",
+        title: "非財產上損害賠償",
+        text: "不法侵害他人之身體、健康、名譽、自由、信用、隱私、貞操，或不法侵害其他人格法益而情節重大者，被害人雖非財產上之損害，亦得請求賠償相當之金額。",
+        summary: "醫療傷害可請求精神慰撫金。名譽受損、身體受傷均可請求非財產上損害賠償。",
+        keywords: ["精神損害", "慰撫金", "非財產損害", "人格法益", "名譽受損", "醫療傷害"],
+        scenarios: ["精神慰撫金", "醫療傷害", "名譽受損", "隱私侵害", "非財產損害"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "civil-227",
+        lawName: "民法",
+        lawCode: "civil_code",
+        article: "第227條之2",
+        articleNumber: 2272,
+        category: "加害給付",
+        title: "不完全給付",
+        text: "因可歸責於債務人之事由，致給付不能、給付遲延或不完全給付者，債權人得請求賠償。",
+        summary: "醫療契約中，醫師給付有瑕疵（如手術失敗）可構成不完全給付，病患可請求損害賠償。",
+        keywords: ["不完全給付", "給付瑕疵", "醫療契約", "債務不履行", "加害給付", "賠償"],
+        scenarios: ["醫療契約", "不完全給付", "給付瑕疵", "手術失敗", "債務不履行"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 刑法
+      {
+        id: "criminal-276",
+        lawName: "刑法",
+        lawCode: "criminal_code",
+        article: "第276條",
+        articleNumber: 276,
+        category: "過失致死",
+        title: "過失致死罪",
+        text: "因過失致人於死者，處二年以下有期徒刑、拘役或二千元以下罰金。",
+        summary: "醫療過失導致病人死亡，可能構成過失致死罪。需證明醫師違反注意義務且因果關係明確。",
+        keywords: ["過失致死", "醫療過失", "死亡", "刑事責任", "過失犯", "醫師刑責"],
+        scenarios: ["醫療過失致死", "手術死亡", "過失致死罪", "刑事追訴", "醫師刑責"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "criminal-284",
+        lawName: "刑法",
+        lawCode: "criminal_code",
+        article: "第284條",
+        articleNumber: 284,
+        category: "過失傷害",
+        title: "過失傷害罪",
+        text: "因過失傷害人者，處六月以下有期徒刑、拘役或五百元以下罰金，致重傷者，處一年以下有期徒刑、拘役或五百元以下罰金。",
+        summary: "醫療過失致病人傷害或重傷，可能構成過失傷害罪。醫療糾紛常見刑事責任類型。",
+        keywords: ["過失傷害", "醫療過失", "重傷", "刑事責任", "過失犯", "醫師刑責"],
+        scenarios: ["醫療過失傷害", "手術併發症", "過失傷害罪", "刑事追訴", "重傷害"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 消費者保護法
+      {
+        id: "consumer-7",
+        lawName: "消費者保護法",
+        lawCode: "consumer_protection_act",
+        article: "第7條",
+        articleNumber: 7,
+        category: "醫療消費",
+        title: "服務責任",
+        text: "從事經銷之企業經營者於提供商品或服務時，應確保其符合當時科技或專業水準可合理期待之安全性。",
+        summary: "醫療服務也適用消保法。醫療服務應符合當時專業水準，違反可能須負消保法責任。",
+        keywords: ["消費者保護", "醫療消費", "服務責任", "專業水準", "安全性", "企業經營者"],
+        scenarios: ["醫療消費", "消保法", "醫美糾紛", "醫療服務", "專業水準"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 兒童及少年福利與權益保障法
+      {
+        id: "child-55",
+        lawName: "兒童及少年福利與權益保障法",
+        lawCode: "child_protection_act",
+        article: "第55條",
+        articleNumber: 55,
+        category: "兒少醫療",
+        title: "兒少醫療權益",
+        text: "兒童及少年罹患疾病或受傷時，其父母、監護人或實際照顧兒童及少年之人應予醫療，不得延誤。",
+        summary: "父母或監護人對兒童疾病有醫療義務，不得延誤。延誤就醫可能涉及兒少保護及刑法遺棄等責任。",
+        keywords: ["兒童醫療", "少年醫療", "監護人義務", "醫療義務", "延誤就醫", "兒少保護"],
+        scenarios: ["兒童醫療", "延誤就醫", "監護人責任", "兒少保護", "醫療義務"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 身心障礙者權益保障法
+      {
+        id: "disability-46",
+        lawName: "身心障礙者權益保障法",
+        lawCode: "disability_protection_act",
+        article: "第46條",
+        articleNumber: 46,
+        category: "身障醫療",
+        title: "身心障礙者醫療復健",
+        text: "各級衛生主管機關應整合醫療資源，提供身心障礙者醫療復健服務，減輕其醫療負擔。",
+        summary: "身心障礙者有醫療復健服務權益。醫療機構應提供適當醫療資源，保障身障者醫療權益。",
+        keywords: ["身心障礙", "醫療復健", "身障醫療", "醫療資源", "復健服務", "醫療權益"],
+        scenarios: ["身障醫療", "復健服務", "醫療權益", "身心障礙", "醫療資源"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 人體器官移植條例
+      {
+        id: "organ-transplant-6",
+        lawName: "人體器官移植條例",
+        lawCode: "organ_transplant_act",
+        article: "第6條",
+        articleNumber: 6,
+        category: "器官移植",
+        title: "活體器官捐贈",
+        text: "活體捐贈器官，須經醫院倫理委員會審查通過，並向中央主管機關申請核准。",
+        summary: "活體捐贈器官須經倫理委員會審查並核准。禁止器官買賣，違法可處重刑。",
+        keywords: ["器官移植", "活體捐贈", "倫理委員會", "器官捐贈", "移植核准", "器官買賣"],
+        scenarios: ["器官捐贈", "活體捐贈", "倫理審查", "器官買賣", "移植糾紛"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "organ-transplant-8",
+        lawName: "人體器官移植條例",
+        lawCode: "organ_transplant_act",
+        article: "第8條",
+        articleNumber: 8,
+        category: "腦死判定",
+        title: "腦死器官捐贈",
+        text: "以腦死判決作為死亡判定者，須由具有腦死判定資格之醫師，依中央衛生主管機關規定，進行腦死判定。",
+        summary: "腦死判定須由專責醫師依規定進行。腦死後器官捐贈有嚴格程序，須確保死亡判定無誤。",
+        keywords: ["腦死", "腦死判定", "死亡判定", "器官捐贈", "器官移植", "判定資格"],
+        scenarios: ["腦死", "腦死判定", "器官捐贈", "死亡判定", "判定爭議"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 醫療法 - 繼續擴充
+      {
+        id: "medical-care-56",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第56條",
+        articleNumber: 56,
+        category: "醫療設施",
+        title: "醫療設施與針具之安全",
+        text: "醫療機構應建立並實施醫療安全制度，採取必要措施，確保醫療設施、儀器、用品及藥物之安全與效能。",
+        summary: "醫院必須確保醫療設施、儀器、針具等安全無虞。醫療器材管理不當導致傷害，醫院可能須負責。",
+        keywords: ["醫療設施", "醫療安全", "針具", "儀器", "醫療器材", "安全管理"],
+        scenarios: ["醫療器材故障", "針具感染", "設施不安全", "器材管理不當"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-57",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第57條",
+        articleNumber: 57,
+        category: "醫療人員",
+        title: "醫療人員執行醫事專門業務法規之規範",
+        text: "醫事人員執行業務，應遵守各該醫事專門職業法規之規定，並受主管機關之監督。",
+        summary: "各類醫事人員（醫師、護理師、藥師等）執行業務須遵守專門法規。超範圍執業可能受罰。",
+        keywords: ["醫事人員", "執業規範", "專門法規", "業務監督", "醫事專門職業"],
+        scenarios: ["超範圍執業", "無照執業", "醫事人員違規", "執業不當"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-59",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第59條",
+        articleNumber: 59,
+        category: "醫師值班",
+        title: "指派醫師值班",
+        text: "醫院應依其規模及業務需要，指派醫師值班，處理急診及住院病人之醫療事務。",
+        summary: "醫院必須指派醫師值班處理急診及住院事務。值班醫師不足導致延誤救治，醫院可能須負責。",
+        keywords: ["醫師值班", "急診", "住院", "值班醫師", "醫院規模", "醫療事務"],
+        scenarios: ["值班醫師不足", "急診延誤", "無醫師值班", "救治不及"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-61",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第61條",
+        articleNumber: 61,
+        category: "醫療倫理",
+        title: "不正當招攬病人及不正當利益獲取之禁止",
+        text: "醫療機構及其人員，不得以不正當方法招攬病人，或獲取不正當利益。",
+        summary: "禁止醫院以不正當方法招攬病人或獲取不正當利益。醫美促銷、轉介費等可能涉及違規。",
+        keywords: ["不正當招攬", "轉介費", "醫療倫理", "不正當利益", "招攬病人"],
+        scenarios: ["醫美促銷", "轉介費", "不當招攬", "醫療倫理"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-69",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第69條",
+        articleNumber: 69,
+        category: "電子病歷",
+        title: "電子文件方式製作貯存之病歷",
+        text: "醫療機構以電子文件方式製作及貯存之病歷，其製作、貯存、查詢、安全維護及管理辦法，由中央主管機關定之。",
+        summary: "電子病歷之製作、儲存、安全維護有專門規定。電子病歷竄改或遺失可能涉及刑責。",
+        keywords: ["電子病歷", "電子文件", "病歷製作", "安全維護", "病歷管理"],
+        scenarios: ["電子病歷竄改", "病歷遺失", "電子病歷安全", "病歷管理不當"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-70",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第70條",
+        articleNumber: 70,
+        category: "病歷管理",
+        title: "病歷之保管及銷燬",
+        text: "病歷之保管期限，除另有規定外，至少應保存七年。病歷之銷燬，應經中央主管機關核准。",
+        summary: "病歷至少保存7年，銷燬須經核准。病歷是醫療糾紛重要證據，未經核准銷燬可能違法。",
+        keywords: ["病歷保管", "保存期限", "病歷銷燬", "七年", "病歷滅失"],
+        scenarios: ["病歷銷燬", "保存期限", "病歷滅失", "未經核准銷燬"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-72",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第72條",
+        articleNumber: 72,
+        category: "醫療保密",
+        title: "秘密洩漏之禁止",
+        text: "醫療機構及其人員，因業務而知悉或持有他人秘密，不得無故洩漏。",
+        summary: "醫療人員對病人隱私負有保密義務，無故洩漏病人秘密可能受罰。這是醫療倫理重要一環。",
+        keywords: ["醫療保密", "秘密洩漏", "病人隱私", "醫療倫理", "隱私權"],
+        scenarios: ["病歷洩漏", "隱私曝光", "醫療保密", "無故洩漏"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-73",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第73條",
+        articleNumber: 73,
+        category: "轉診",
+        title: "轉診及急救處置",
+        text: "醫院、診所因限於人員、設備，對於病人無法為適當之診治時，應建議病人轉診。",
+        summary: "醫院設備或能力不足時應建議轉診。無故拒絕轉診導致延誤治療，可能涉及醫療責任。",
+        keywords: ["轉診", "急救", "設備不足", "轉診建議", "醫療能力"],
+        scenarios: ["拒絕轉診", "轉診延誤", "設備不足", "急救處置"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-78",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第78條",
+        articleNumber: 78,
+        category: "人體試驗",
+        title: "施行人體試驗機構之規定及查核",
+        text: "醫療機構施行人體試驗，應經中央主管機關核准，並接受查核。",
+        summary: "人體試驗須經核准並接受查核。未經核准擅自進行人體試驗，可能涉及刑事責任。",
+        keywords: ["人體試驗", "試驗核准", "醫療機構", "試驗查核", "臨床試驗"],
+        scenarios: ["未經核准試驗", "人體試驗", "試驗查核", "臨床試驗違規"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-79",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第79條",
+        articleNumber: 79,
+        category: "人體試驗",
+        title: "人體試驗前應載明之事項與過失責任",
+        text: "醫療機構施行人體試驗，應於試驗前依主管機關規定，向受試者或其法定代理人詳細說明並取得書面同意。",
+        summary: "人體試驗必須充分告知並取得書面同意。告知不足或強迫試驗可能涉及刑事過失責任。",
+        keywords: ["人體試驗", "告知義務", "書面同意", "受試者", "試驗風險"],
+        scenarios: ["未告知風險", "試驗同意", "人體試驗", "強迫試驗"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-care-80",
+        lawName: "醫療法",
+        lawCode: "medical_care_act",
+        article: "第80條",
+        articleNumber: 80,
+        category: "人體試驗",
+        title: "人體試驗之試驗報告",
+        text: "醫療機構施行人體試驗，應作成試驗報告，並於試驗完成後一定期限內，報請主管機關備查。",
+        summary: "人體試驗必須製作報告並報主管機關備查。試驗記錄不完整或隱匿結果可能違法。",
+        keywords: ["人體試驗", "試驗報告", "主管機關", "試驗記錄", "備查"],
+        scenarios: ["試驗報告不全", "隱匿試驗結果", "人體試驗", "未報備"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 醫療事故預防及爭議處理法 - 更多條款
+      {
+        id: "medical-dispute-12",
+        lawName: "醫療事故預防及爭議處理法",
+        lawCode: "medical_dispute_act",
+        article: "第12條",
+        articleNumber: 12,
+        category: "醫療調解",
+        title: "醫療爭議調解",
+        text: "醫療爭議當事人得向地方衛生主管機關申請調解，調解成立者，其效力與確定判決同。",
+        summary: "醫療糾紛可申請調解，調解成立效力等同判決。調解是醫療糾紛快速解決管道。",
+        keywords: ["醫療調解", "爭議處理", "調解成立", "確定判決", "衛生局", "調解申請"],
+        scenarios: ["醫療調解", "調解成立", "調解申請", "醫療糾紛", "衛生局調解"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "medical-dispute-27",
+        lawName: "醫療事故預防及爭議處理法",
+        lawCode: "medical_dispute_act",
+        article: "第27條",
+        articleNumber: 27,
+        category: "強制通報",
+        title: "醫療事故通報",
+        text: "醫療機構發生醫療事故，應於發現後二十四小時內向地方衛生主管機關通報。",
+        summary: "醫療事故24小時內須向衛生局通報。隱匿不報可受罰，並影響醫院評鑑。",
+        keywords: ["醫療事故", "強制通報", "24小時", "衛生局", "通報義務", "隱匿"],
+        scenarios: ["醫療事故", "事故通報", "隱匿不報", "強制通報", "衛生局"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 藥事法
+      {
+        id: "pharmaceutical-37",
+        lawName: "藥事法",
+        lawCode: "pharmaceutical_act",
+        article: "第37條",
+        articleNumber: 37,
+        category: "藥物不良反應",
+        title: "藥物不良反應通報",
+        text: "醫療機構、藥局及醫藥事人員發現藥物有嚴重不良反應時，應即通報中央衛生主管機關。",
+        summary: "藥物嚴重不良反應須即時通報。藥害事件通報是藥物安全管理重要機制。",
+        keywords: ["藥物不良反應", "藥害", "通報", "嚴重不良", "藥物安全", "不良反應"],
+        scenarios: ["藥物不良反應", "藥害通報", "嚴重不良", "藥物安全", "不良事件"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      {
+        id: "pharmaceutical-50",
+        lawName: "藥事法",
+        lawCode: "pharmaceutical_act",
+        article: "第50條",
+        articleNumber: 50,
+        category: "偽禁藥",
+        title: "偽藥禁藥處罰",
+        text: "製造或輸入偽藥、禁藥者，處十年以下有期徒刑，得併科新臺幣一億元以下罰金。",
+        summary: "使用偽藥、禁藥或劣藥可構成刑事犯罪。醫院使用來路不明藥物可能涉及刑責。",
+        keywords: ["偽藥", "禁藥", "劣藥", "刑事", "偽藥罪", "藥物安全", "處罰"],
+        scenarios: ["偽藥", "禁藥", "劣藥", "假藥", "藥物安全", "刑事"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 醫事檢驗師法
+      {
+        id: "medical-lab-18",
+        lawName: "醫事檢驗師法",
+        lawCode: "medical_laboratory_act",
+        article: "第18條",
+        articleNumber: 18,
+        category: "檢驗業務",
+        title: "檢驗業務執行",
+        text: "醫事檢驗師受醫師委託，得執行臨床檢驗業務，並製作檢驗報告。",
+        summary: "醫事檢驗師須受醫師委託執行檢驗，並製作報告。檢驗錯誤可能導致誤診，涉及醫療疏失。",
+        keywords: ["醫事檢驗", "檢驗師", "檢驗報告", "臨床檢驗", "委託檢驗", "檢驗錯誤"],
+        scenarios: ["檢驗錯誤", "檢驗報告", "誤診", "檢驗師", "委託檢驗"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 醫事放射師法
+      {
+        id: "radiologic-13",
+        lawName: "醫事放射師法",
+        lawCode: "radiologic_technologist_act",
+        article: "第13條",
+        articleNumber: 13,
+        category: "放射業務",
+        title: "放射業務執行",
+        text: "醫事放射師受醫師委託，得執行放射線診斷、治療及核子醫學業務。",
+        summary: "醫事放射師須受醫師委託執行放射業務。放射劑量錯誤或影像判讀疏失可能涉及醫療責任。",
+        keywords: ["醫事放射", "放射師", "放射線", "核子醫學", "放射劑量", "委託"],
+        scenarios: ["放射劑量", "放射疏失", "影像判讀", "放射師", "核子醫學"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 物理治療師法
+      {
+        id: "physical-therapy-22",
+        lawName: "物理治療師法",
+        lawCode: "physical_therapist_act",
+        article: "第22條",
+        articleNumber: 22,
+        category: "物理治療",
+        title: "物理治療業務",
+        text: "物理治療師執行業務，應依醫師開具之診療醫囑為之。但為緊急防範、避免疾病惡化，得依其專業先行處理。",
+        summary: "物理治療師應依醫囑執行治療。緊急時可先行處理。治療不當可能涉及醫療疏失。",
+        keywords: ["物理治療", "復健", "治療師", "醫囑", "緊急處理", "復健治療"],
+        scenarios: ["物理治療", "復健", "治療不當", "醫囑", "復健疏失"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 職能治療師法
+      {
+        id: "occupational-therapy-21",
+        lawName: "職能治療師法",
+        lawCode: "occupational_therapist_act",
+        article: "第21條",
+        articleNumber: 21,
+        category: "職能治療",
+        title: "職能治療業務",
+        text: "職能治療師執行業務，應依醫師開具之診療醫囑為之。但為緊急防範、避免疾病惡化，得依其專業先行處理。",
+        summary: "職能治療師應依醫囑執行治療。職能治療涉及日常生活功能訓練，治療不當可能涉及責任。",
+        keywords: ["職能治療", "職能治療師", "醫囑", "日常生活", "功能訓練", "治療業務"],
+        scenarios: ["職能治療", "功能訓練", "治療不當", "醫囑", "職能治療師"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 助產人員法
+      {
+        id: "midwife-17",
+        lawName: "助產人員法",
+        lawCode: "midwife_act",
+        article: "第17條",
+        articleNumber: 17,
+        category: "助產業務",
+        title: "助產業務執行",
+        text: "助產人員執行助產業務，應製作紀錄，記載產婦及新生兒之健康狀況及處置，並簽名或蓋章。",
+        summary: "助產人員須製作生產紀錄。生產過程中若有疏失導致產婦或新生兒受損，可能涉及醫療責任。",
+        keywords: ["助產", "助產師", "生產紀錄", "產婦", "新生兒", "健康狀況"],
+        scenarios: ["助產疏失", "生產意外", "新生兒損傷", "產婦損傷", "助產紀錄"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 預防接種法
+      {
+        id: "vaccination-18",
+        lawName: "預防接種法",
+        lawCode: "vaccination_act",
+        article: "第18條",
+        articleNumber: 18,
+        category: "接種救濟",
+        title: "預防接種受害救濟",
+        text: "因預防接種而受害者，得申請受害救濟。因正當實施預防接種或難以避免之副作用者，給予救濟。",
+        summary: "疫苗接種受害可申請救濟。屬無過失補償，無需證明醫療過失即可申請救濟金。",
+        keywords: ["預防接種", "疫苗", "受害救濟", "無過失", "救濟金", "副作用"],
+        scenarios: ["疫苗受害", "接種救濟", "預防接種", "副作用", "救濟申請"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      },
+      // 醫療糾紛爭議調解及仲裁法
+      {
+        id: "medical-arbitration-5",
+        lawName: "醫療糾紛爭議調解及仲裁法",
+        lawCode: "medical_arbitration_act",
+        article: "第5條",
+        articleNumber: 5,
+        category: "醫療仲裁",
+        title: "醫療爭議仲裁",
+        text: "醫療爭議當事人得於爭議發生後，依據仲裁協議，將爭議提付仲裁。",
+        summary: "醫療糾紛可提付仲裁。仲裁一裁終局，效力等同確定判決，是快速解決醫療糾紛管道。",
+        keywords: ["醫療仲裁", "仲裁協議", "一裁終局", "確定判決", "醫療爭議", "仲裁"],
+        scenarios: ["醫療仲裁", "仲裁協議", "醫療糾紛", "快速解決", "仲裁程序"],
+        source: { name: "全國法規資料庫", url: "https://law.moj.gov.tw/" },
+        updatedAt: "2026-04-20"
+      }
+    ];
+
+    // 醫療法律主題
+    const topics = [
+      { name: "醫療疏失", icon: "疏", text: "醫療過失、診斷錯誤、治療不當、醫療責任歸屬。", terms: ["醫療疏失", "醫療過失", "醫療責任", "診斷錯誤", "治療不當"] },
+      { name: "手術爭議", icon: "術", text: "手術同意、告知義務、併發症、同意書爭議。", terms: ["手術", "同意書", "告知", "併發症", "風險", "手術失敗"] },
+      { name: "病歷申請", icon: "歷", text: "病歷製作義務、申請病歷、病歷竄改、紀錄不完整。", terms: ["病歷", "病歷申請", "醫師", "病歷紀錄", "竄改"] },
+      { name: "麻醉問題", icon: "麻", text: "麻醉過量、麻醉過敏、醒不來、劑量爭議。", terms: ["麻醉", "劑量", "過敏", "醒不來", "監測", "麻醉事故"] },
+      { name: "用藥安全", icon: "藥", text: "藥物過敏、用藥錯誤、劑量問題、過敏史未詢問。", terms: ["藥物", "過敏", "處方", "藥品", "用藥", "劑量錯誤"] },
+      { name: "診斷延誤", icon: "診", text: "癌症沒發現、延誤診斷、檢查不足、病情惡化。", terms: ["診斷", "延誤", "癌症", "腫瘤", "沒發現", "早期"] },
+      { name: "院內感染", icon: "感", text: "手術後感染、傷口化膿、消毒不當、無菌操作。", terms: ["院內感染", "感染", "化膿", "手術感染", "消毒", "細菌"] },
+      { name: "醫療調解", icon: "調", text: "醫療爭議說明、溝通協調、調解程序、爭議處理。", terms: ["醫療爭議", "調解", "溝通", "病歷", "說明義務"] }
+    ];
+
+    // 同義詞對照表
+    const synonymMap = {
+      "醫療糾紛": ["醫療糾紛", "醫療爭議", "醫療疏失", "醫療過失", "醫療責任", "病歷", "醫師", "病患", "醫院", "醫療事故"],
+      "醫療爭議": ["醫療糾紛", "醫療爭議", "醫療事故", "調解", "病歷", "溝通"],
+      "醫療疏失": ["醫療糾紛", "醫療疏失", "醫療過失", "醫療責任", "過失"],
+      "醫療過失": ["醫療糾紛", "醫療疏失", "醫療過失", "醫療責任", "注意義務"],
+      "手術": ["手術", "開刀", "麻醉", "同意書", "併發症", "風險"],
+      "病歷": ["病歷", "病歷申請", "醫師", "病歷紀錄", "竄改", "紀錄"],
+      "告知義務": ["告知", "說明", "同意", "風險", "併發症", "手術同意"],
+      "麻醉": ["麻醉", "全身麻醉", "半身麻醉", "麻醉過量", "劑量"],
+      "藥物": ["藥物", "用藥", "過敏", "處方", "劑量", "藥品"],
+      "診斷": ["診斷", "延誤", "癌症", "腫瘤", "早期", "發現"],
+      "感染": ["感染", "化膿", "院內感染", "手術感染", "細菌", "消毒"]
+    };
+
+    const searchInput = document.querySelector("#searchInput");
+    const lawFilter = document.querySelector("#lawFilter");
+    const topicFilters = document.querySelector("#topicFilters");
+    const lawResults = document.querySelector("#lawResults");
+    const clearSearch = document.querySelector("#clearSearch");
+    const topicCards = document.querySelector("#topicCards");
+    const queryInput = document.querySelector("#queryInput");
+    const analyzeBtn = document.querySelector("#analyzeBtn");
+    const analysisResult = document.querySelector("#analysisResult");
+
+    let activeTopic = "";
+
+    function unique(items) {
+      return [...new Set(items)];
+    }
+
+    function normalize(text) {
+      return String(text || "").toLowerCase().trim();
+    }
+
+    function expandTerms(terms) {
+      return unique(terms.flatMap(term => [term, ...(synonymMap[term] || [])]));
+    }
+
+    function scoreLaw(law, terms) {
+      if (!terms.length) return 1;
+      const expandedTerms = expandTerms(terms);
+      const fields = [
+        { value: law.keywords.join(" "), weight: 5 },
+        { value: law.scenarios.join(" "), weight: 4 },
+        { value: law.category, weight: 3 },
+        { value: `${law.lawName} ${law.article} ${law.title}`, weight: 3 },
+        { value: law.summary, weight: 2 },
+        { value: law.text, weight: 1 }
+      ];
+      return expandedTerms.reduce((total, term) => {
+        const nTerm = normalize(term);
+        return total + fields.reduce((fieldTotal, field) => normalize(field.value).includes(nTerm) ? fieldTotal + field.weight : fieldTotal, 0);
+      }, 0);
+    }
+
+    function renderLawCard(law, score = 0) {
+      const relevance = score > 0 ? `<span class="tag gold">相關度 ${score}</span>` : "";
+      return `
+        <article class="law-card">
+          <header>
+            <div>
+              <h3 class="law-title">${law.lawName}｜${law.title}</h3>
+              <div class="meta"><span class="tag coral">${law.category}</span>${relevance}</div>
+            </div>
+            <span class="article">${law.article}</span>
+          </header>
+          <p class="summary">${law.summary}</p>
+          <details>
+            <summary>查看條文摘要</summary>
+            <p>${law.text}</p>
+          </details>
+          <div class="meta">
+            ${law.keywords.map(keyword => `<span class="tag">${keyword}</span>`).join("")}
+          </div>
+          <a class="source" href="${law.source.url}" target="_blank" rel="noreferrer">${law.source.name} ↗</a>
+        </article>
+      `;
+    }
+
+    function getSearchTerms() {
+      const typed = searchInput.value.split(/[,\s，、]+/).filter(Boolean);
+      const topic = topics.find(item => item.name === activeTopic);
+      return expandTerms(topic ? unique([...typed, ...topic.terms]) : typed);
+    }
+
+    function renderResults() {
+      const selectedLaw = lawFilter.value;
+      const terms = getSearchTerms();
+      const ranked = laws
+        .filter(law => !selectedLaw || law.lawCode === selectedLaw)
+        .map(law => ({ law, score: scoreLaw(law, terms) }))
+        .filter(item => !terms.length || item.score > 0)
+        .sort((a, b) => b.score - a.score || a.law.articleNumber - b.law.articleNumber);
+
+      lawResults.innerHTML = ranked.length
+        ? ranked.map(item => renderLawCard(item.law, item.score)).join("")
+        : `<div class="empty">目前沒有找到相符資料。可以換一個醫療關鍵字，例如「醫療疏失」、「病歷」、「手術風險」、「告知義務」。</div>`;
+    }
+
+    function setupFilters() {
+      unique(laws.map(law => law.lawCode)).forEach(code => {
+        const law = laws.find(item => item.lawCode === code);
+        lawFilter.insertAdjacentHTML("beforeend", `<option value="${code}">${law.lawName}</option>`);
+      });
+
+      topicFilters.innerHTML = topics.map(topic => `<button class="chip" type="button" data-topic="${topic.name}">${topic.name}</button>`).join("");
+      topicFilters.addEventListener("click", event => {
+        const button = event.target.closest("button[data-topic]");
+        if (!button) return;
+        activeTopic = activeTopic === button.dataset.topic ? "" : button.dataset.topic;
+        document.querySelectorAll("#topicFilters .chip").forEach(chip => chip.classList.toggle("active", chip.dataset.topic === activeTopic));
+        renderResults();
+      });
+    }
+
+    function renderTopics() {
+      topicCards.innerHTML = topics.map(topic => `
+        <button class="topic-card" type="button" data-terms="${topic.terms.join(" ")}">
+          <span class="topic-icon">${topic.icon}</span>
+          <h3>${topic.name}</h3>
+          <p>${topic.text}</p>
+        </button>
+      `).join("");
+
+      topicCards.addEventListener("click", event => {
+        const card = event.target.closest(".topic-card");
+        if (!card) return;
+        searchInput.value = card.dataset.terms;
+        activeTopic = "";
+        document.querySelectorAll("#topicFilters .chip").forEach(chip => chip.classList.remove("active"));
+        renderResults();
+        document.querySelector("#search").scrollIntoView({ behavior: "smooth" });
+      });
+    }
+
+    function extractTerms(query) {
+      const dictionary = unique(topics.flatMap(topic => topic.terms).concat(laws.flatMap(law => law.keywords), laws.flatMap(law => law.scenarios)));
+      const hits = dictionary.filter(term => query.includes(term));
+      const fallback = query.split(/[,\s，、。！？；：]+/).filter(word => word.length >= 2).slice(0, 5);
+      return expandTerms(unique([...hits, ...fallback]));
+    }
+
+    function analyzeQuery() {
+      const query = queryInput.value.trim();
+      if (!query) {
+        analysisResult.innerHTML = `<div class="empty">請先輸入醫療情境描述。</div>`;
+        return;
+      }
+
+      const terms = extractTerms(query);
+      const ranked = laws
+        .map(law => ({ law, score: scoreLaw(law, terms) }))
+        .filter(item => item.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 5);
+
+      const matchedLaws = unique(ranked.map(item => item.law.lawName));
+
+      analysisResult.innerHTML = `
+        <div class="analysis-block">
+          <h3>情境摘要</h3>
+          <p>${query}</p>
+        </div>
+        <div class="analysis-block">
+          <h3>可能涉及醫療法律</h3>
+          <p>${matchedLaws.length ? matchedLaws.join("、") : "目前資料不足，尚未找到明確候選醫療法規。"}</p>
+          <div class="meta">${terms.map(term => `<span class="tag">${term}</span>`).join("")}</div>
+        </div>
+        <div class="analysis-block">
+          <h3>候選醫療法條</h3>
+          ${ranked.length ? ranked.map(item => renderLawCard(item.law, item.score)).join("") : "<p>建議改用更具體的醫療關鍵字，例如手術、病歷、麻醉、診斷、感染等。</p>"}
+        </div>
+        <div class="analysis-block">
+          <h3>下一步整理方向</h3>
+          <p>選擇想延伸整理的內容，系統會依目前候選醫療法條產生對應摘要。</p>
+          <div class="action-toolbar">
+            <div>
+              <label for="nextAction">延伸內容</label>
+              <select id="nextAction">
+                <option value="lawDigest">相關醫療法條彙整</option>
+                <option value="plainExplain">白話解釋重點</option>
+                <option value="evidence">證據與資料清單</option>
+                <option value="procedure">可以怎麼做</option>
+                <option value="questionDraft">詢問機關或律師草稿</option>
+              </select>
+            </div>
+            <button id="runNextAction" class="btn secondary" type="button">產生整理</button>
+          </div>
+          <div id="nextActionOutput" class="action-output"></div>
+        </div>
+        <div class="analysis-block">
+          <h3>免責提醒</h3>
+          <p>以上為醫療法律 AI-lite 整理結果，僅作醫療法律資訊查詢與學習參考，不構成法律意見或個案判斷。實際醫療糾紛請諮詢專業醫療法律律師。</p>
+        </div>
+      `;
+      setupNextAction(query, terms, ranked);
+    }
+
+    function setupNextAction(query, terms, ranked) {
+      const actionSelect = document.querySelector("#nextAction");
+      const actionButton = document.querySelector("#runNextAction");
+      const output = document.querySelector("#nextActionOutput");
+      const render = () => {
+        output.innerHTML = getActionContent(actionSelect.value, query, terms, ranked);
+      };
+      actionButton.addEventListener("click", render);
+      actionSelect.addEventListener("change", render);
+      render();
+    }
+
+    function getActionContent(type, query, terms, ranked) {
+      const matched = ranked.map(item => item.law);
+      const lawList = matched.length
+        ? matched.map(law => `<li><strong>${law.lawName} ${law.article}</strong>：${law.summary}</li>`).join("")
+        : "<li>目前候選醫療法條不足，建議補充醫療事件時間、對象、損害、證據與對方主張。</li>";
+
+      const templates = {
+        lawDigest: `
+          <h4>相關醫療法條彙整</h4>
+          <p>此整理會依候選醫療法條提供初步方向；若涉及重大醫療傷害、死亡或刑事疑慮，應儘早尋求主管機關或專業醫療法律律師協助。</p>
+          <ul>${lawList}</ul>
+          <p>正式使用時，條文內容應以全國法規資料庫或主管機關公告為準。</p>
+        `,
+        plainExplain: `
+          <h4>白話解釋重點</h4>
+          <ul>
+            <li>先把「發生什麼醫療事件」和「受到什麼損害」分開整理。</li>
+            <li>再比對候選醫療法條關心的要件，例如是否有醫療注意義務、是否超出合理臨床裁量、損害和醫療行為之間是否有因果關聯。</li>
+            <li>醫療糾紛不等於一定有醫療疏失；通常還需要病歷、醫療常規、專業鑑定與因果關係資料。</li>
+            <li>AI 只能幫你整理問題和資料，不應直接判斷誰一定有醫療疏失或一定能求償。</li>
+          </ul>
+        `,
+        evidence: `
+          <h4>證據與資料清單</h4>
+          <ul>
+            <li>醫療事件時間線：就診日期、檢查項目、治療過程、用藥紀錄、症狀變化、後續處置。</li>
+            <li>醫療文件資料：病歷、診斷證明、檢查報告、收據、轉診紀錄、用藥紀錄。</li>
+            <li>醫療溝通紀錄：醫院說明、客服或申訴紀錄、簡訊、電子郵件、錄音逐字稿摘要。</li>
+            <li>損害證明資料：額外醫療支出、工作損失、照護費用、傷勢照片、其他醫師第二意見。</li>
+            <li>避免放入身分證字號、完整地址、病歷號等敏感個資；展示或測試時可先遮蔽。</li>
+          </ul>
+        `,
+        procedure: `
+          <h4>可以怎麼做</h4>
+          <ul>
+            <li>第一步：用時間線整理醫療事實，列出你不理解或希望院方說明的問題。</li>
+            <li>第二步：向醫療機構請求說明，並依醫療法規與院內程序申請病歷或相關資料。</li>
+            <li>第三步：若溝通無法釐清，可評估向地方衛生主管機關、醫療爭議調解會或法律扶助資源詢問。</li>
+            <li>第四步：若有重大醫療傷害、死亡、刑事疑慮或時效壓力，應儘早帶完整資料諮詢醫療法律專業律師。</li>
+            <li>不要只問「能不能告贏」，先問「還缺哪些醫療事實、資料和專業判斷」。</li>
+          </ul>
+        `,
+        questionDraft: `
+          <h4>詢問草稿</h4>
+          <p>您好，我想詢問以下醫療爭議或法律資訊整理方向：</p>
+          <ul>
+            <li>醫療事件概要：${query}</li>
+            <li>目前關鍵字：${terms.slice(0, 8).join("、") || "尚未整理"}</li>
+            <li>想確認的問題：本案可能涉及哪些醫療法規？我應該先準備哪些病歷、收據、溝通紀錄或證明？</li>
+            <li>目前希望取得的協助：醫療法條資訊、申請病歷方式、醫療機構說明、調解或諮詢管道。</li>
+          </ul>
+          <p>提醒：送出前請自行刪除或遮蔽不必要的敏感個資。</p>
+        `
+      };
+
+      return templates[type] || templates.lawDigest;
+    }
+
+    searchInput.addEventListener("input", renderResults);
+    lawFilter.addEventListener("change", renderResults);
+    clearSearch.addEventListener("click", () => {
+      searchInput.value = "";
+      lawFilter.value = "";
+      activeTopic = "";
+      document.querySelectorAll("#topicFilters .chip").forEach(chip => chip.classList.remove("active"));
+      renderResults();
+    });
+    analyzeBtn.addEventListener("click", analyzeQuery);
+
+    setupFilters();
+    renderTopics();
+    renderResults();
+    analyzeQuery();
+  </script>
+</body>
+</html>
